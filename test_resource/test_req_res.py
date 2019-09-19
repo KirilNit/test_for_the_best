@@ -23,14 +23,24 @@ class TestReqRes:
 
     @pytest.mark.parametrize("req, exp_code",
                              [("/api/unknown?id=2", 200), ("/api/unknown?id=10000000", 404),
-                              ("/api/unknown?page=2", 200), ("/api/unknown?page=1000000000", 404)]
+                              ("/api/unknown?page=2", 200), ("/api/unknown?page=1000000000", 404),
+                              ("/api/unknown?page=string", 404)
+                              ]
                              )
     def test_res_stcodes_correct(self, req, exp_code):
         response = self.api_util.get(req, parse=False)
-        assert response.status_code == exp_code, \
+        assert exp_code == response.status_code, \
             f"Unexpected status code {response.status_code} for request {req}, " \
             f"expected - {exp_code}"
 
     def test_api_res_pagination(self):
         page_two = self.api_util.get("/api/unknown?page=2", True)
         assert page_two['page'] == 2, f"Unexpected page number in response {page_two['page']}"
+
+    @pytest.mark.parametrize("key, value", [("page", 1), ("per_page", 6),
+                                            ("total", 12), ("total_pages", 2)
+                                            ])
+    def test_unknown_no_params(self, key, value):
+        resource_api = self.api_util.get("/api/unknown", parse=True)
+        assert resource_api[key] == value, \
+            f"Expected value {value} for {key} is not equal to actual {resource_api[key]}"
