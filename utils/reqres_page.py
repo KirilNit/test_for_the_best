@@ -68,7 +68,7 @@ class ReqResPage:
 
     def text_parser(self, id):
         content = self.driver.text_content(self.content_element_selector)
-        prse = ast.literal_eval(content)
-        for _ in prse['data']:
-            if _['id'] == id:
-                return _
+        parsed_content = ast.literal_eval(content)
+        for resource in parsed_content['data']:
+            if resource['id'] == id:
+                return resource
