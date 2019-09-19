@@ -14,11 +14,12 @@ class TestReqRes:
         resource_ui = self.req_page.resource_ui_parser()
         assert resource_api['data'] == resource_ui, "Resources are not equal in UI and API response"
 
-    def test_compare_values(self):
+    @pytest.mark.parametrize("key", [('id'), ('name'), ('year'), ('color'), ('pantone_value')])
+    def test_compare_values(self, key):
         resource_api = self.api_util.get("/api/unknown?id=2", parse=True)
         resource_ui = self.req_page.resource_ui_parser()
-        assert resource_ui['id'] == resource_api['data']['id'], f"IDs dont mutch UI - {resource_ui['id']}, " \
-                                                                f"API - {resource_api['data']['id']}"
+        assert resource_ui[key] == resource_api['data'][key], f"IDs dont mutch UI - {resource_ui[key]}, " \
+                                                              f"API - {resource_api['data'][key]}"
 
     @pytest.mark.parametrize("req, exp_code",
                              [("/api/unknown?id=2", 200), ("/api/unknown?id=10000000", 404),

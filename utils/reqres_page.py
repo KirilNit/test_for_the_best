@@ -11,9 +11,13 @@ class ReqResPage:
         self.section_list_resource = "//a[contains(text(), 'List <resource>')]/parent::li"
         self.showed_request = "//p[@class='request-title']/descendant::span"
         self.content_element_selector = "//div[@class='response']/child::pre"
+        self.logo = "//h1[@class='logo']"
+        self.tagline = "//h2[@class='tagline']"
 
     def go_main_page(self, url='https://reqres.in'):
         self.driver.go_to_url(url)
+        self.driver.wait_for_visibility_of_web_element(self.logo)
+        self.driver.wait_for_visibility_of_web_element(self.tagline)
 
     def chose_action(self):
         self.driver.wait_for_presence_of_element_located(self.section_list_resource)
