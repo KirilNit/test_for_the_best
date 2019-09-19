@@ -25,7 +25,7 @@ class ReqResPage:
         self.driver.wait_for_visibility_of_web_element(self.showed_request)
         text = self.driver.get_web_element_text(self.showed_request)
         assert expected in text, \
-            "Not expected result for shown request, actual: {}, expected: {}".format(text, expected)
+            f"Not expected result for shown request, actual: {text}, expected: {expected}"
         return text
 
     def resource_ui_parser(self, id='2', parse=True):

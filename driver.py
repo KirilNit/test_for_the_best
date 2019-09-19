@@ -14,7 +14,6 @@ class WebDriver(object):
 
     def __init__(self, browser="Chrome", browser_path='',
                  chrome_path='', driver=None):
-        self.browser = browser.lower()
         self.driver = driver if driver else webdriver.Chrome()
         self.logger = WebDrLogger(__name__)
         self.by = By
@@ -24,42 +23,38 @@ class WebDriver(object):
     def go_to_url(self, url):
         self.driver.get(url)
 
-    def wait_for_web_element_to_be_located(self, element, timeout=False):
-        wait = WebDriverWait(self.driver, timeout=timeout if timeout else self.timeout)
-        self.logger.info("Waiting for WebElement with locator {}".format(element))
-        messageError = "Element with locator {} was not found after {} seconds".format(element,
-                                                                                       timeout if timeout else self.timeout)
+    def wait_for_web_element_to_be_located(self, element: str, timeout=False):
+        wait = WebDriverWait(self.driver, timeout=timeout or self.timeout)
+        self.logger.info(f"Waiting for WebElement with locator {element}")
+        messageError = f"Element with locator {element} was not found after {timeout or self.timeout} seconds"
         web_element = wait.until(EC.presence_of_element_located((By.XPATH, element)), message=messageError)
 
         return web_element
 
-    def wait_for_visibility_of_web_element(self, element, timeout=False):
-        wait = WebDriverWait(self.driver, timeout=timeout if timeout else self.timeout)
-        self.logger.info("Waiting for WebElement with locator {}".format(element))
-        messageError = "Element with locator {} was not visible after {} seconds".format(element,
-                                                                                         timeout if timeout else self.timeout)
+    def wait_for_visibility_of_web_element(self, element: str, timeout=False):
+        wait = WebDriverWait(self.driver, timeout=timeout or self.timeout)
+        self.logger.info(f"Waiting for WebElement with locator {element}")
+        messageError = f"Element with locator {element} was not visible after {timeout or self.timeout} seconds"
         web_element = wait.until(EC.visibility_of_element_located((By.XPATH, element)), message=messageError)
         return web_element
 
-    def wait_for_web_element_to_be_clickable(self, element, timeout=False):
-        wait = WebDriverWait(self.driver, timeout=timeout if timeout else self.timeout)
-        self.logger.info("Waiting for WebElement with locator {}".format(element))
-        messageError = "Element with locator {} was not clickable after {} seconds".format(element,
-                                                                                           timeout if timeout else self.timeout)
+    def wait_for_web_element_to_be_clickable(self, element: str, timeout=False):
+        wait = WebDriverWait(self.driver, timeout=timeout or self.timeout)
+        self.logger.info(f"Waiting for WebElement with locator {element}")
+        messageError = f"Element with locator {element} was not clickable after {timeout or self.timeout} seconds"
         self.wait_for_visibility_of_web_element(element)
         web_element = wait.until(EC.element_to_be_clickable((By.XPATH, element)), message=messageError)
         return web_element
 
-    def wait_for_presence_of_element_located(self, element, timeout=False):
-        wait = WebDriverWait(self.driver, timeout=timeout if timeout else self.timeout)
-        self.logger.info("Waiting for WebElement with locator {}".format(element))
-        messageError = "Element with locator {} was not present after {} seconds".format(element,
-                                                                                         timeout if timeout else self.timeout)
+    def wait_for_presence_of_element_located(self, element: str, timeout=False):
+        wait = WebDriverWait(self.driver, timeout=timeout or self.timeout)
+        self.logger.info(f"Waiting for WebElement with locator {element}")
+        messageError = f"Element with locator {element} was not present after {timeout or self.timeout} seconds"
         self.wait_for_visibility_of_web_element(element)
         web_element = wait.until(EC.presence_of_element_located((By.XPATH, element)), message=messageError)
         return web_element
 
-    def click_web_element(self, element, timeout=30):
+    def click_web_element(self, element: str, timeout=30):
         start_time = time.time()
         while time.time() < (start_time + timeout):
             element = self.wait_for_web_element_to_be_clickable(element)
@@ -70,7 +65,7 @@ class WebDriver(object):
             except Exception as e:
                 self.logger.info(e)
 
-    def set_web_element_text(self, element, text):
+    def set_web_element_text(self, element: str, text):
         try:
             web_element = self.driver.find_element_by_xpath(element)
             web_element.clear()
@@ -78,7 +73,7 @@ class WebDriver(object):
         except (WebDriverException, StaleElementReferenceException) as ex:
             raise Exception("Fail in set_web_element_text with Exception - {}".format(ex))
 
-    def get_web_element_text(self, path):
+    def get_web_element_text(self, path: str):
         text = self.driver.find_element_by_xpath(path).text
         return text
 
