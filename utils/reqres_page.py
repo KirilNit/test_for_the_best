@@ -66,7 +66,7 @@ class ReqResPage:
             return parsed
         return resp
 
-    def text_parser(self, id):
+    def resource_text_parser(self, id: int):
         content = self.driver.text_content(self.content_element_selector)
         parsed_content = ast.literal_eval(content)
         for resource in parsed_content['data']:
