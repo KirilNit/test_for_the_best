@@ -3,7 +3,7 @@ from driver import WebDriver
 from bs4 import BeautifulSoup
 import ast
 
-@pytest.mark.usefixtures("req_res_page")
+
 class ReqResPage:
 
     def __init__(self, driver):
