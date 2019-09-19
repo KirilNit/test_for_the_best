@@ -79,3 +79,6 @@ class WebDriver(object):
 
     def get_page_source(self):
         return self.driver.page_source
+
+    def text_content(self, element):
+        return self.driver.find_element_by_xpath(element).get_attribute('textContent')

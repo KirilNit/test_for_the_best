@@ -1,7 +1,7 @@
 import pytest
 from driver import WebDriver
 from bs4 import BeautifulSoup
-
+import ast
 
 @pytest.mark.usefixtures("req_res_page")
 class ReqResPage:
@@ -34,7 +34,7 @@ class ReqResPage:
 
     def resource_ui_parser(self, id='2', parse=True):
         """
-
+        Can use this parser, or method described below
         :param id: id of resource
         :param parse: parsed in dict resource
         :return: parsed resource by id
@@ -65,3 +65,10 @@ class ReqResPage:
                         parsed[_.text[1:-2]] = resp[value_indx].text[1:-1]
             return parsed
         return resp
+
+    def text_parser(self, id):
+        content = self.driver.text_content(self.content_element_selector)
+        prse = ast.literal_eval(content)
+        for _ in prse['data']:
+            if _['id'] == id:
+                return _

@@ -10,9 +10,10 @@ class TestReqRes:
         self.req_page.go_main_page()
         self.req_page.chose_action()
         self.req_page.get_endpoint('/api/unknown')
+        res_ui = self.req_page.text_parser(2)
         resource_api = self.api_util.get("/api/unknown?id=2", parse=True)
-        resource_ui = self.req_page.resource_ui_parser()
-        assert resource_api['data'] == resource_ui, "Resources are not equal in UI and API response"
+        # resource_ui = self.req_page.resource_ui_parser()
+        assert resource_api['data'] == res_ui, "Resources are not equal in UI and API response"
 
     @pytest.mark.parametrize("key", [('id'), ('name'), ('year'), ('color'), ('pantone_value')])
     def test_compare_values(self, key):
