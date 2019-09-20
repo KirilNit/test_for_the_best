@@ -10,7 +10,7 @@ class TestReqRes:
         self.req_page.go_main_page()
         self.req_page.chose_action()
         self.req_page.get_endpoint('/api/unknown')
-        res_ui = self.req_page.text_parser(2)
+        res_ui = self.req_page.resource_text_parser(2)
         resource_api = self.api_util.get("/api/unknown?id=2", parse=True)
         assert resource_api['data'] == res_ui, "Resources are not equal in UI and API response"
 
